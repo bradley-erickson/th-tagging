@@ -200,14 +200,14 @@ def _validate_submit(verbs, inputs):
 def log_card(data):
     """Append JSON data to log file with timestamp and user"""
     timestamp = datetime.datetime.now().isoformat(timespec='milliseconds')
-    username = flask.request.authorization.username if flask.request.authorization else 'anonymous'
+    username = flask.request.headers.get('X-Forwarded-Email', 'anonymous')
 
     full_record = {
         'timestamp': timestamp,
         'user': username,
         'data': data
     }
-    with open('tags.jsonl', 'a') as f:
+    with open('logs/tags.jsonl', 'a') as f:
         f.write(json.dumps(full_record) + '\n')
 
 
